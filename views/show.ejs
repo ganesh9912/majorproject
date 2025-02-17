@@ -1,0 +1,58 @@
+<% layout("/layouts/boilerplate") -%>
+
+<script>
+    const mapToken = "<%= process.env.MAP_TOKEN %>";
+    // Parse the coordinates from listing.geometry
+    const coordinates = JSON.parse("<%- JSON.stringify(listing.geometry.coordinates) %>");
+    console.log("Coordinates from EJS:", coordinates); // Check the coordinates in the console
+</script>
+
+<div class="row mt-3 mb-3">
+    <div class="col-8 offset-2 show-cards">  
+        <body>
+            <h1>All Listings<%= listing._id %></h1>
+            <div class="card row-cols-3">  
+                <img src="<%= listing.image.url %>" class="card-img-top show-img" alt="listing_image">
+                <div class="card-body">
+                    <p class="card-text">
+                        <b><%= listing.title %></b> <br>
+                        <strong>Title:</strong> <%= listing.title %><br>
+                        <strong>Price:</strong> <%= listing.price %><br>
+                        <strong>username:</strong> <%= listing.owner.username %><br>
+                        <strong>Description:</strong> <%= listing.description %><br>
+                        <strong>Location:</strong> <%= listing.location %><br>
+                        <strong>Country:</strong> <%= listing.country %>
+                    </p>
+                </div>
+            </div>
+            <br>
+        </body>
+    </div>
+</div>
+
+<div class="btns">
+    <a href="/listings/<%= listing._id %>/edit" class="edit-btn col-1 offset-2">Edit</a>
+    <div class="col-1">
+        <form method="POST" action="/listings/<%= listing._id %>?_method=DELETE">
+            <button type="submit" class="btn btn-dark offset-1">Delete</button>
+        </form> 
+    </div>
+    <br>
+</div><br><br>
+
+<div class="col-8 offset-3 mb-3">
+    <h3>Where you'll be</h3>
+</div>
+<head>
+    <link href="https://api.mapbox.com/mapbox-gl-js/v3.9.4/mapbox-gl.css" rel="stylesheet">
+    <script src="https://api.mapbox.com/mapbox-gl-js/v3.9.4/mapbox-gl.js"></script>
+    
+</head>
+
+<!-- Map Container -->
+<div id="map" style="height: 400px; width: 100%;"></div>
+
+<script src="/js/map.js"></script>
+
+
+
