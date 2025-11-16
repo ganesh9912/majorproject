@@ -32,7 +32,7 @@
 
 <div class="btns">
     <% if(currentUser && currentUser._id.equals(listing.owner._id)) { %>
-        <!-- Show Edit/Delete if logged-in user is the owner -->
+        <!-- Owner: Edit/Delete -->
         <a href="/listings/<%= listing._id %>/edit" class="edit-btn col-1 offset-2">Edit</a>
         <div class="col-1">
             <form method="POST" action="/listings/<%= listing._id %>?_method=DELETE">
@@ -40,15 +40,16 @@
             </form> 
         </div>
     <% } else { %>
-        <!-- Show Buy Now / Add to Cart for other users -->
-        <a href="/listings/<%= listing._id %>/edit" class="edit-btn col-1 offset-2">Buy</a>
+        <!-- Other users: Buy Now / Add to Cart -->
+        <a href="/purchase/<%= listing._id %>" class="btn btn-success col-1 offset-2">Buy Now</a>
         <div class="col-1">
-            <form method="POST" action="/listings/<%= listing._id %>?_method=DELETE">
-                <button type="submit" class="btn btn-dark offset-1">cart</button>
+            <form method="POST" action="/cart/add/<%= listing._id %>">
+                <button type="submit" class="btn btn-primary offset-1">Add to Cart</button>
             </form> 
         </div>
     <% } %>
 </div>
+
 
 <br><br>
 <br><br>
