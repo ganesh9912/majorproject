@@ -1,1 +1,112 @@
+<% layout("/layouts/boilerplate") -%>
 
+<style>
+  body {
+    background-color: #f1f3f6;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  }
+
+  .purchase-container {
+    margin-top: 50px;
+  }
+
+  .purchase-card {
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+    overflow: hidden;
+  }
+
+  .purchase-card img {
+    max-width: 100%;
+    border-radius: 10px 0 0 10px;
+    object-fit: cover;
+  }
+
+  .purchase-details {
+    padding: 30px;
+  }
+
+  .purchase-details h2 {
+    font-weight: 700;
+    color: #212121;
+    margin-bottom: 20px;
+  }
+
+  .purchase-details h4, .purchase-details p {
+    margin-bottom: 12px;
+  }
+
+  .purchase-btn {
+    background-color: #fb641b;
+    border: none;
+    color: #fff;
+    font-weight: 700;
+    padding: 12px;
+    width: 100%;
+    font-size: 1.1rem;
+    border-radius: 5px;
+    transition: 0.3s;
+  }
+
+  .purchase-btn:hover {
+    background-color: #e55d1a;
+  }
+
+  .price-summary {
+    background-color: #f8f9fa;
+    padding: 20px;
+    border-radius: 8px;
+    margin-top: 20px;
+  }
+
+  .price-summary h5 {
+    font-weight: 600;
+  }
+</style>
+
+<div class="container purchase-container">
+  <div class="row justify-content-center">
+    <% if(listing) { %>
+      <div class="col-lg-10 col-md-12 col-sm-12">
+        <div class="card purchase-card d-flex flex-row">
+
+          <!-- Left: Product Image -->
+          <div class="col-md-5 p-3">
+            <img src="<%= listing.image?.url || '/images/default.jpg' %>" alt="<%= listing.title %>">
+          </div>
+
+          <!-- Right: Product Details -->
+          <div class="col-md-7 purchase-details">
+            <h2><%= listing.title %></h2>
+            <h4>Price: $<%= listing.price %></h4>
+            <h5>Location: <%= listing.location %>, <%= listing.country %></h5>
+            <p><%= listing.description %></p>
+
+            <!-- Price Summary -->
+            <div class="price-summary">
+              <h5>Price Summary</h5>
+              <hr>
+              <p>Product Price: $<%= listing.price %></p>
+              <p>Delivery Charges: $50</p>
+              <hr>
+              <p><strong>Total: $<%= listing.price + 50 %></strong></p>
+            </div>
+
+            <!-- Confirm Purchase Button -->
+            <form action="/purchase/<%= listing._id %>" method="POST" class="mt-4">
+              <button type="submit" class="purchase-btn">
+                Confirm Purchase
+              </button>
+            </form>
+          </div>
+
+        </div>
+      </div>
+    <% } else { %>
+      <div class="alert alert-danger text-center">
+        Listing not found!
+      </div>
+    <% } %>
+  </div>
+</div>
