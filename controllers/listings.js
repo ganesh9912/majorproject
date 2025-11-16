@@ -17,6 +17,7 @@ module.exports.index = async (req,res) => {
     res.render("./create.ejs");
 };
 
+
 module.exports.showListing = async (req,res) => {
     let { id } = req.params;
     const listing = await Listing.findById(id).populate("owner");
@@ -27,6 +28,33 @@ module.exports.showListing = async (req,res) => {
     }
     res.render("show.ejs", { listing, currentUser: req.user }); // <-- pass currentUser here
 }
+
+module.exports.renderPurchasePage = async (req, res) => {
+    const { id } = req.params;
+    const listing = await Listing.findById(id).populate("owner");
+
+    if (!listing) {
+        req.flash("error", "Listing not found");
+        return res.redirect("/listings");
+    }
+
+    res.render("purchase.ejs", { listing, currentUser: req.user });
+}
+
+module.exports.confirmPurchase = async (req, res) => {
+    const { id } = req.params;
+    const listing = await Listing.findById(id);
+
+    if (!listing) {
+        req.flash("error", "Listing not found");
+        return res.redirect("/listings");
+    }
+
+    // Here you can integrate payment gateway or mark as purchased
+    req.flash("success", `You have successfully purchased ${listing.title}`);
+    res.redirect("/listings");
+}
+
 
 module.exports.createListing = async (req, res, next) => {
     let response = await geocodingClient
