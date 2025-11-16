@@ -30,17 +30,27 @@
     </div>
 </div>
 
-<% if(currentUser && currentUser._id.equals(listing.owner._id)) { %>
-    <a href="/listings/<%= listing._id %>/edit" class="btn btn-warning">Edit</a>
-    <form method="POST" action="/listings/<%= listing._id %>?_method=DELETE" style="display:inline;">
-        <button type="submit" class="btn btn-danger">Delete</button>
-    </form>
-<% } else { %>
-    <a href="/purchase/<%= listing._id %>" class="btn btn-success">Buy Now</a>
-    <form method="POST" action="/cart/add/<%= listing._id %>" style="display:inline;">
-        <button type="submit" class="btn btn-primary">Add to Cart</button>
-    </form>
-<% } %>
+<div class="btns">
+    <% if(currentUser && currentUser._id.equals(listing.owner._id)) { %>
+        <!-- Show Edit/Delete if logged-in user is the owner -->
+        <a href="/listings/<%= listing._id %>/edit" class="edit-btn col-1 offset-2">Edit</a>
+        <div class="col-1">
+            <form method="POST" action="/listings/<%= listing._id %>?_method=DELETE">
+                <button type="submit" class="btn btn-dark offset-1">Delete</button>
+            </form> 
+        </div>
+    <% } else { %>
+        <!-- Show Buy Now / Add to Cart for other users -->
+        <a href="/listings/<%= listing._id %>/edit" class="edit-btn col-1 offset-2">Buy</a>
+        <div class="col-1">
+            <form method="POST" action="/listings/<%= listing._id %>?_method=DELETE">
+                <button type="submit" class="btn btn-dark offset-1">cart</button>
+            </form> 
+        </div>
+    <% } %>
+</div>
+
+<br><br>
 <br><br>
 
 <div class="col-8 offset-3 mb-3">
