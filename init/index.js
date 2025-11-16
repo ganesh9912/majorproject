@@ -3,7 +3,7 @@ const initData = require("./data.js");
 const Listing = require("../models/listings.js"); // adjust path if needed
 
 // Use Atlas URL from environment variable
-const mongo_url = process.env.MONGO_URL;
+const mongo_url = "mongodb+srv://ganesh:ganesh123@cluster0.cacaj.mongodb.net/wanderlust?retryWrites=true&w=majority";
 
 async function main() {
     try {
