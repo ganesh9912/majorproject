@@ -45,6 +45,11 @@ listingController.createListing,
   );
   
 
+// Buy Now page
+router.get("/purchase/:id", isLoggedIn, wrapAsync(listingController.renderPurchasePage));
+
+// Handle purchase confirmation (optional)
+router.post("/purchase/:id", isLoggedIn, wrapAsync(listingController.confirmPurchase));
 
 router.get("/listings/:id/edit", isLoggedIn,wrapAsync(listingController.renderEditForm)
 );
