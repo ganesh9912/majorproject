@@ -1,43 +1,38 @@
 const mongoose = require("mongoose");
 const initData = require("./data.js");
-const Listing = require("../models/listings.js"); // adjust path if needed
+const Listing = require("../models/listings.js");
 
-// Use Atlas URL from environment variable
-const mongo_url = "mongodb+srv://ganesh:ganesh123@cluster0.cacaj.mongodb.net/wanderlust?retryWrites=true&w=majority";
+const mongo_url = mongodb+srv://ganesh:ganesh123%40@cluster0.cacaj.mongodb.net/?appName=Cluster0;
 
-async function main() {
-    try {
-        await mongoose.connect(mongo_url, {
-            useNewUrlParser: true,
-            useUnifiedTopology: true,
-        });
-        console.log("✅ Connected to MongoDB Atlas");
-    } catch (err) {
-        console.log("❌ MongoDB connection error:", err);
-    }
-}
+const main = async ()=>  {
+    await mongoose.connect(mongo_url);
+   }
+   
+main()
+.then(() => {
+    console.log("connected to db");
+})
+ .catch((err) => {
+    console.log("error");
+})
 
-main().then(() => initDB());
+
 
 const initDB = async () => {
-    try {
-        // Clear existing listings
-        await Listing.deleteMany({});
+    await Listing.deleteMany({}); // Clear existing data
 
-        // Add owner and default geometry if not present
-        const dataWithDefaults = initData.data.map((obj) => ({
-            ...obj,
-            owner: "67a449f5f77031ba93c531b0", // default owner ID
-            geometry: obj.geometry || { 
-                type: "Point", 
-                coordinates: [74.0060, 40.7128] // default coordinates
-            }
-        }));
+    initData.data = initData.data.map((obj) => ({
+        ...obj,
+        owner: "67a449f5f77031ba93c531b0", // Assign a default owner ID
+        geometry: obj.geometry || { 
+            type: "Point", 
+            coordinates: [74.0060, 40.7128] // Default coordinates (update this if necessary)
+        }
+    }));
 
-        await Listing.insertMany(dataWithDefaults);
-        console.log("✅ Data initialized successfully!");
-        mongoose.connection.close(); // close connection after seeding
-    } catch (err) {
-        console.log("❌ Error initializing DB:", err);
-    }
+    await Listing.insertMany(initData.data);
+    console.log(" Data was initialized successfully!");
 };
+
+
+initDB();
