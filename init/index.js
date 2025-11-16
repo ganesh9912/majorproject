@@ -1,38 +1,43 @@
 const mongoose = require("mongoose");
 const initData = require("./data.js");
-const Listing = require("../models/listings.js");
+const Listing = require("../models/listings.js"); // adjust path if needed
 
-const mongo_url = "mongodb://127.0.0.1:27017/wanderlust";
+// Use Atlas URL from environment variable
+const mongo_url = process.env.MONGO_URL;
 
-const main = async ()=>  {
-    await mongoose.connect(mongo_url);
-   }
-   
-main()
-.then(() => {
-    console.log("connected to db");
-})
- .catch((err) => {
-    console.log("error");
-})
+async function main() {
+    try {
+        await mongoose.connect(mongo_url, {
+            useNewUrlParser: true,
+            useUnifiedTopology: true,
+        });
+        console.log("✅ Connected to MongoDB Atlas");
+    } catch (err) {
+        console.log("❌ MongoDB connection error:", err);
+    }
+}
 
-
+main().then(() => initDB());
 
 const initDB = async () => {
-    await Listing.deleteMany({}); // Clear existing data
+    try {
+        // Clear existing listings
+        await Listing.deleteMany({});
 
-    initData.data = initData.data.map((obj) => ({
-        ...obj,
-        owner: "67a449f5f77031ba93c531b0", // Assign a default owner ID
-        geometry: obj.geometry || { 
-            type: "Point", 
-            coordinates: [74.0060, 40.7128] // Default coordinates (update this if necessary)
-        }
-    }));
+        // Add owner and default geometry if not present
+        const dataWithDefaults = initData.data.map((obj) => ({
+            ...obj,
+            owner: "67a449f5f77031ba93c531b0", // default owner ID
+            geometry: obj.geometry || { 
+                type: "Point", 
+                coordinates: [74.0060, 40.7128] // default coordinates
+            }
+        }));
 
-    await Listing.insertMany(initData.data);
-    console.log(" Data was initialized successfully!");
+        await Listing.insertMany(dataWithDefaults);
+        console.log("✅ Data initialized successfully!");
+        mongoose.connection.close(); // close connection after seeding
+    } catch (err) {
+        console.log("❌ Error initializing DB:", err);
+    }
 };
-
-
-initDB();
