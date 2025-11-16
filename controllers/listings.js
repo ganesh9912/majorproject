@@ -22,10 +22,10 @@ module.exports.showListing = async (req,res) => {
     const listing = await Listing.findById(id).populate("owner");
     console.log(listing);
     if(!listing){
-        req.flash("error","listing you requested doesnot exist");
-        res.redirect("/listings");
+        req.flash("error","Listing you requested does not exist");
+        return res.redirect("/listings");
     }
-    res.render("show.ejs" ,{listing});
+    res.render("show.ejs", { listing, currentUser: req.user }); // <-- pass currentUser here
 }
 
 module.exports.createListing = async (req, res, next) => {
