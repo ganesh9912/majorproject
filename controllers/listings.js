@@ -18,17 +18,15 @@ module.exports.index = async (req,res) => {
 };
 
 module.exports.showListing = async (req,res) => {
-    const { id } = req.params;
+    let { id } = req.params;
     const listing = await Listing.findById(id).populate("owner");
-
+    console.log(listing);
     if(!listing){
-        req.flash("error","Listing you requested does not exist");
-        return res.redirect("/listings");
+        req.flash("error","listing you requested doesnot exist");
+        res.redirect("/listings");
     }
-    
-    res.render("show.ejs", { listing, currentUser: req.user });
-};
-
+    res.render("show.ejs" ,{listing});
+}
 
 module.exports.createListing = async (req, res, next) => {
     let response = await geocodingClient
